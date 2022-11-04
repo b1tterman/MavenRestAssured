@@ -4,6 +4,7 @@ import io.restassured.http.ContentType;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.time.Clock;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,6 +78,32 @@ public class ReqresTest {
         Assert.assertEquals(sortedYears, years);
         System.out.println(years);
         System.out.println(sortedYears);
+    }
 
+    @Test
+    public void deleteUserTest(){
+        Specifications.installSpecification(Specifications.requestSpec(URL), Specifications.responseSpecUnique(204));
+        given()
+                .when()
+                .delete("/api/users/2")
+                .then().log().all();
+    }
+
+    @Test
+    public void timeTest(){
+        Specifications.installSpecification(Specifications.requestSpec(URL), Specifications.responseSpecOK200());
+        UserTime user = new UserTime("morpheus", "zion resident");
+        UserTimeResponse response = given()
+                .body(user)
+                .when()
+                .put("api/users/2")
+                .then().log().all()
+                .extract().as(UserTimeResponse.class);
+        String regex = "(.{11})$";
+        String regex2 = "(.{5})$";
+        String currentTime = Clock.systemUTC().instant().toString().replaceAll(regex,"");
+        Assert.assertEquals(currentTime, response.getUpdatedAt().replaceAll(regex2,""));
+        System.out.println("currentTime: " + currentTime);
+        System.out.println("updateTime: " + response.getUpdatedAt().replaceAll(regex2,""));
     }
 }
