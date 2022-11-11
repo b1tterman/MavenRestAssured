@@ -1,6 +1,13 @@
-package api;
+package api.reqres;
 
-import io.restassured.http.ContentType;
+import api.reqres.colors.Data;
+import api.reqres.registration.Register;
+import api.reqres.registration.SuccessReg;
+import api.reqres.registration.UnSuccessReg;
+import api.reqres.spec.Specifications;
+import api.reqres.users.UserData;
+import api.reqres.users.UserTime;
+import api.reqres.users.UserTimeResponse;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -10,9 +17,15 @@ import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
 
-public class ReqresTest {
+public class ReqresPojoTest {
 
     private final static String URL = "https://reqres.in";
+
+    /**
+     * 1. Получить список пользователей со второй страницы сайта https://reqres.in;
+     * 2. Убедиться, что id пользователей содержатся в их avatar;
+     * 3. Удебиться, что email пользователей имеет окончание reqres.in;
+     */
 
     @Test
     public void checkAvatarAndIdTest(){
@@ -68,12 +81,12 @@ public class ReqresTest {
     @Test
     public void sortedYearsTest(){
         Specifications.installSpecification(Specifications.requestSpec(URL), Specifications.responseSpecOK200());
-        List<ColorsData> colors = given()
+        List<Data> colors = given()
                 .when()
                 .get("api/unknown")
                 .then().log().all()
-                .extract().body().jsonPath().getList("data", ColorsData.class);
-        List<Integer> years = colors.stream().map(ColorsData::getYear).collect(Collectors.toList());
+                .extract().body().jsonPath().getList("data", Data.class);
+        List<Integer> years = colors.stream().map(Data::getYear).collect(Collectors.toList());
         List<Integer> sortedYears = years.stream().sorted().collect(Collectors.toList());
         Assert.assertEquals(sortedYears, years);
         System.out.println(years);

@@ -1,16 +1,16 @@
-package api;
+package api.reqres.colors;
 
-public class ColorsData {
+public class Data {
     private Integer id;
     private String name;
     private Integer year;
     private String color;
     private String pantone_value;
 
-    public ColorsData() {
+    public Data() {
     }
 
-    public ColorsData(Integer id, String name, Integer year, String color, String pantone_value) {
+    public Data(Integer id, String name, Integer year, String color, String pantone_value) {
         this.id = id;
         this.name = name;
         this.year = year;

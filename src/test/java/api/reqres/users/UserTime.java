@@ -1,4 +1,4 @@
-package api;
+package api.reqres.users;
 
 public class UserTime {
     private String name;
